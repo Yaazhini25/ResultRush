@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XYZ University - Result Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">XYZ UNIVERSITY — Result Portal</h1>
+        
+        <div class="form-section">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="reg_no">Register Number:</label>
+                    <input type="text" id="reg_no" name="reg_no" placeholder="e.g., 1000" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" required>
+                </div>
+                
+                <button type="submit" class="btn">View Results</button>
+            </form>
+        </div>
+        
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        {% if student and results %}
+        <div class="result-section">
+            <div class="student-info">
+                <p><strong>Register Number:</strong> {{ student['reg_no'] }}</p>
+                <p><strong>Date of Birth:</strong> {{ student['dob'] }}</p>
+                <p><strong>Semester:</strong> {{ student['sem'] }}</p>
+            </div>
+            
+            <table class="result-table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>Grade</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in results %}
+                    <tr class="{% if row['result'] == 'Fail' %}fail-row{% else %}pass-row{% endif %}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ row['sub_code'] }}</td>
+                        <td>{{ row['sub_name'] }}</td>
+                        <td>{{ row['grade'] }}</td>
+                        <td>{{ row['result'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
