@@ -1,0 +1,37 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Build
+    displayName: 'Build Stage'
+    jobs:
+      - job: BuildJob
+        displayName: 'Build Job'
+        steps:
+          - script: |
+              echo "Restoring project dependencies..."
+            displayName: 'Restore dependencies'
+
+          - script: |
+              echo "Running unit tests..."
+            displayName: 'Run regression tests'
+
+  - stage: Test
+    displayName: 'Test Stage'
+    dependsOn: Build
+    isSkippable: false
+    jobs:
+      - job: TestJob
+        displayName: 'Test Job'
+        steps:
+          - script: |
+              echo "Running unit tests..."
+            displayName: 'Run regression tests'
